@@ -33,6 +33,7 @@ mysql2 → Conector para MariaDB/MySQL.
 
 3. Crear el Archivo de Configuración .env
 Dentro de la carpeta perfumeria, crea un archivo llamado .env y agrega la siguiente configuración:
+
 DB_HOST=localhost
 
 DB_USER=root
