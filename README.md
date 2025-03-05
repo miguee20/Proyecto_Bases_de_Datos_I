@@ -33,14 +33,17 @@ mysql2 → Conector para MariaDB/MySQL.
 
 3. Crear el Archivo de Configuración .env
 Dentro de la carpeta perfumeria, crea un archivo llamado .env y agrega la siguiente configuración:
-
 DB_HOST=localhost
+
 DB_USER=root
+
 DB_PASSWORD=tu_contraseña
+
 DB_NAME=fragancia
+
 Reemplaza tu_contraseña con la contraseña de tu base de datos
 
-4. Ejecutar el Servidor
+5. Ejecutar el Servidor
 Ejecuta el siguiente comando para iniciar el servidor:
 
 npm start
