@@ -24,8 +24,11 @@ npm install express cors dotenv mysql2
 Esto instalará las siguientes dependencias:
 
 express → Framework para el servidor.
+
 cors → Permite comunicación entre frontend y backend.
+
 dotenv → Manejo de variables de entorno.
+
 mysql2 → Conector para MariaDB/MySQL.
 
 3. Crear el Archivo de Configuración .env
