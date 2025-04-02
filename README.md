@@ -1,80 +1,59 @@
-# Perfumería - Instalación y Configuración
-Este proyecto es un sistema de gestión para una perfumería, desarrollado con Node.js, Express, MariaDB y un frontend en HTML/CSS. A continuación, se detallan los pasos para instalar y configurar el entorno de desarrollo.
+# Tienda de Fragancias
 
-# 📌 Requisitos Previos
-Antes de comenzar, asegúrate de tener instalados los siguientes programas en tu computadora:
+Este proyecto es una aplicación completa para la gestión de una tienda de fragancias. Permite manejar información sobre productos, proveedores, clientes, compras, ventas y devoluciones a través de una API RESTful. Además, el frontend será desarrollado con **HTML** y **CSS** para proporcionar una interfaz fácil de usar.
 
-- Node.js (versión recomendada: LTS)
-- MariaDB (para la base de datos)
-- Git (para clonar el repositorio)
-- Un editor de código (Ejemplo: VS Code)
+## Descripción
 
-# 📂 Clonar el Proyecto
-Hagan una carpeta que se llame "perfumeria" adentro descarguen los archivos de backend y metanlos ahi. Luego, hagan una carpeta que se llame frontend y metan ahi esos archivos, descarguen de una el fragancia.sql tambien
+La aplicación está diseñada para gestionar todas las operaciones de una tienda de fragancias, desde la administración de inventarios hasta la gestión de proveedores, clientes y transacciones de compra y venta. 
 
-# 🔧 Instalación del Backend
-1. Abrir VS Code y la Terminal
-Abre VS Code y selecciona la carpeta perfumeria.
-Abre la terminal en VS Code (Ver → Terminal o usa Ctrl + ñ).
-2. Instalar Dependencias
-Ejecuta el siguiente comando en la terminal:
+El sistema ofrece operaciones **CRUD** (Crear, Leer, Actualizar, Eliminar) para productos, proveedores, clientes y otros recursos clave. Utiliza **MariaDB** como base de datos para almacenar la información de manera segura y eficiente.
 
-npm install express cors dotenv mysql2
+## Tecnologías Utilizadas 🛠️
 
-Esto instalará las siguientes dependencias:
+- **Node.js**: Para ejecutar el backend de la aplicación.
+- **Express.js**: Framework web para la construcción de la API RESTful.
+- **MariaDB**: Base de datos relacional para almacenar la información.
+- **HTML y CSS**: Para la creación del frontend de la aplicación.
 
-express → Framework para el servidor.
+## Estructura de Rutas 🚀
 
-cors → Permite comunicación entre frontend y backend.
+La aplicación cuenta con las siguientes rutas para gestionar los diferentes recursos:
 
-dotenv → Manejo de variables de entorno.
+- **/api/productos**: Rutas para la gestión de productos (CRUD).
+- **/api/proveedores**: Rutas para la gestión de proveedores (CRUD).
+- **/api/clientes**: Rutas para la gestión de clientes (CRUD).
+- **/api/compras**: Rutas para registrar y consultar compras realizadas.
+- **/api/ventas**: Rutas para registrar y consultar ventas realizadas.
+- **/api/devoluciones**: Rutas para registrar y consultar devoluciones de productos.
 
-mysql2 → Conector para MariaDB/MySQL.
+## Conexión a la Base de Datos 🔗
 
-3. Crear el Archivo de Configuración .env
-Dentro de la carpeta perfumeria, crea un archivo llamado .env y agrega la siguiente configuración:
+La aplicación se conecta a una base de datos **MariaDB**. Se ha configurado un archivo `.env` para manejar las variables de entorno, tales como las credenciales de la base de datos.
+
+Ejemplo de archivo `.env`:
 
 DB_HOST=localhost
-
 DB_USER=root
-
-DB_PASSWORD=tu_contraseña
-
+DB_PASSWORD=password
 DB_NAME=fragancia
+DB_PORT=3307
 
-Reemplaza tu_contraseña con la contraseña de tu base de datos
+## Instrucciones para Ejecutar el Proyecto 🏃‍♂️
+Clona este repositorio:
 
-5. Ejecutar el Servidor
-Ejecuta el siguiente comando para iniciar el servidor:
+git clone https://github.com/tu-usuario/tienda-fragancias.git
+cd tienda-fragancias
 
-npm start
+# Instala las dependencias:
 
-Si todo está bien, deberías ver:
+npm install
 
-🚀 Servidor corriendo en http://localhost:5000
-✅ Conexión exitosa a la base de datos
+# Configura tu archivo .env con las credenciales de la base de datos.
 
-# 🛢️ Instalación de la Base de Datos
-1. Abre MariaDB o un gestor (cmd)
-2. Crea la base de datos manualmente con el siguiente comando:
+Inicia el servidor:
 
-CREATE DATABASE fragancia;
+node backend/server.js
 
-3. Importa la estructura y datos:
-- En la carpeta database, encontrarás un archivo llamado fragancia.sql.
-- Impórtalo en tu gestor de base de datos (desde la línea de comandos).
+El servidor debería estar corriendo en http://localhost:5000.
 
-
-# 🎨 Instalación del Frontend
-- Abre la carpeta frontend.
-- Abre el archivo index.html en un navegador.
-Para hacer cambios, edita los archivos dentro de la carpeta frontend.
-
-# 🚀 Ejecución del Proyecto
-Inicia el backend con el siguiente comando:
-
-npm start
-
-Abre el frontend accediendo a frontend/index.html en tu navegador.
-
-Si todo está correcto, deberías poder ver los productos y gestionarlos desde la interfaz web.
+# Recordar que el puerto de la base de datos es el 3307 (agregar al path de mariadb)
