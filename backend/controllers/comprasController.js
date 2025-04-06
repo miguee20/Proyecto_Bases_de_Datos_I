@@ -13,9 +13,9 @@ exports.obtenerCompras = (req, res) => {
 
 // Crear una nueva compra
 exports.crearCompra = (req, res) => {
-    const { id_cliente, fecha_compra, total } = req.body;
-    const query = 'INSERT INTO Compra (id_cliente, fecha_compra, total) VALUES (?, ?, ?)';
-    db.query(query, [id_cliente, fecha_compra, total], (err, result) => {
+    const { fecha, total, id_proveedor, id_empleado, id_sucursal } = req.body;
+    const query = 'INSERT INTO Compra (fecha, total, id_proveedor, id_empleado, id_sucursal) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [fecha, total, id_proveedor, id_empleado, id_sucursal], (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Error al crear la compra');
@@ -27,9 +27,9 @@ exports.crearCompra = (req, res) => {
 // Actualizar una compra
 exports.actualizarCompra = (req, res) => {
     const { id } = req.params;
-    const { id_cliente, fecha_compra, total } = req.body;
-    const query = 'UPDATE Compra SET id_cliente = ?, fecha_compra = ?, total = ? WHERE id_compra = ?';
-    db.query(query, [id_cliente, fecha_compra, total, id], (err, result) => {
+    const { fecha, total, id_proveedor, id_empleado, id_sucursal } = req.body;
+    const query = 'UPDATE Compra SET fecha = ?, total = ?, id_proveedor = ?, id_empleado = ?, id_sucursal = ? WHERE id_compra = ?';
+    db.query(query, [fecha, total, id_proveedor, id_empleado, id_sucursal, id], (err, result) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Error al actualizar la compra');
