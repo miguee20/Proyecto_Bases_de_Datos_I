@@ -1,48 +1,47 @@
 const proveedorModel = require('../models/proveedorModel');
 
-// Obtener todos los proveedores
+// GET /api/proveedores
 const obtenerProveedores = (req, res) => {
     proveedorModel.obtenerProveedores((err, proveedores) => {
-        if (err) return res.status(500).json({ error: 'Error al obtener los proveedores' });
+        if (err) return res.status(500).json({ error: 'Error al obtener proveedores' });
         res.json(proveedores);
     });
 };
 
-// Obtener un proveedor por ID
+// GET /api/proveedores/:id
 const obtenerProveedorPorId = (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     proveedorModel.obtenerProveedorPorId(id, (err, proveedor) => {
-        if (err) return res.status(500).json({ error: 'Error al obtener el proveedor' });
-        if (!proveedor) return res.status(404).json({ error: 'Proveedor no encontrado' });
+        if (err) return res.status(404).json({ error: 'Proveedor no encontrado' });
         res.json(proveedor);
     });
 };
 
-// Crear un nuevo proveedor
+// POST /api/proveedores
 const crearProveedor = (req, res) => {
-    const { nombre, direccion, telefono, email } = req.body;
-    proveedorModel.crearProveedor({ nombre, direccion, telefono, email }, (err, proveedor) => {
+    const data = req.body;
+    proveedorModel.crearProveedor(data, (err, nuevoProveedor) => {
         if (err) return res.status(500).json({ error: 'Error al crear proveedor' });
-        res.status(201).json(proveedor);
+        res.status(201).json(nuevoProveedor);
     });
 };
 
-// Actualizar un proveedor
+// PUT /api/proveedores/:id
 const actualizarProveedor = (req, res) => {
-    const { id } = req.params;
-    const { nombre, direccion, telefono, email } = req.body;
-    proveedorModel.actualizarProveedor(id, { nombre, direccion, telefono, email }, (err, proveedor) => {
+    const id = req.params.id;
+    const data = req.body;
+    proveedorModel.actualizarProveedor(id, data, (err, proveedorActualizado) => {
         if (err) return res.status(500).json({ error: 'Error al actualizar proveedor' });
-        res.json(proveedor);
+        res.json(proveedorActualizado);
     });
 };
 
-// Eliminar un proveedor
+// DELETE /api/proveedores/:id
 const eliminarProveedor = (req, res) => {
-    const { id } = req.params;
-    proveedorModel.eliminarProveedor(id, (err) => {
+    const id = req.params.id;
+    proveedorModel.eliminarProveedor(id, (err, resultado) => {
         if (err) return res.status(500).json({ error: 'Error al eliminar proveedor' });
-        res.status(204).json({ message: 'Proveedor eliminado correctamente' });
+        res.json({ mensaje: 'Proveedor eliminado correctamente' });
     });
 };
 
