@@ -2,28 +2,17 @@ const db = require('../config/db');  // Conexión a la base de datos
 
 // Obtener todos los proveedores
 const obtenerProveedores = (callback) => {
-    db.query('SELECT * FROM proveedor', (err, results) => {  // Usar db.query
-        if (err) {
-            console.error('Error al obtener proveedores:', err);
-            callback(err, null);
-            return;
-        }
+    db.query('SELECT * FROM proveedor', (err, results) => {
+        if (err) return callback(err, null);
         callback(null, results);
     });
 };
 
 // Obtener un proveedor por ID
 const obtenerProveedorPorId = (id, callback) => {
-    db.query('SELECT * FROM proveedor WHERE id = ?', [id], (err, results) => {  // Usar db.query
-        if (err) {
-            console.error('Error al obtener proveedor:', err);
-            callback(err, null);
-            return;
-        }
-        if (results.length === 0) {
-            callback(new Error('Proveedor no encontrado'), null);
-            return;
-        }
+    db.query('SELECT * FROM proveedor WHERE id_proveedor = ?', [id], (err, results) => {
+        if (err) return callback(err, null);
+        if (results.length === 0) return callback(new Error('Proveedor no encontrado'), null);
         callback(null, results[0]);
     });
 };
@@ -32,38 +21,26 @@ const obtenerProveedorPorId = (id, callback) => {
 const crearProveedor = (data, callback) => {
     db.query('INSERT INTO proveedor (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)', 
     [data.nombre, data.direccion, data.telefono, data.email], 
-    (err, results) => {  // Usar db.query
-        if (err) {
-            console.error('Error al crear proveedor:', err);
-            callback(err, null);
-            return;
-        }
+    (err, results) => {
+        if (err) return callback(err, null);
         callback(null, { id: results.insertId, ...data });
     });
 };
 
 // Actualizar un proveedor
 const actualizarProveedor = (id, data, callback) => {
-    db.query('UPDATE proveedor SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id = ?', 
+    db.query('UPDATE proveedor SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id_proveedor = ?', 
     [data.nombre, data.direccion, data.telefono, data.email, id], 
-    (err, results) => {  // Usar db.query
-        if (err) {
-            console.error('Error al actualizar proveedor:', err);
-            callback(err, null);
-            return;
-        }
+    (err, results) => {
+        if (err) return callback(err, null);
         callback(null, { id, ...data });
     });
 };
 
 // Eliminar un proveedor
 const eliminarProveedor = (id, callback) => {
-    db.query('DELETE FROM proveedor WHERE id = ?', [id], (err, results) => {  // Usar db.query
-        if (err) {
-            console.error('Error al eliminar proveedor:', err);
-            callback(err, null);
-            return;
-        }
+    db.query('DELETE FROM proveedor WHERE id_proveedor = ?', [id], (err, results) => {
+        if (err) return callback(err, null);
         callback(null, results);
     });
 };
