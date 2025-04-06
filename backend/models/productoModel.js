@@ -56,8 +56,12 @@ const eliminarProducto = (id, callback) => {
         if (err) {
             return callback(err);
         }
-        callback(null, results);
+        if (results.affectedRows === 0) {
+            return callback(null, { mensaje: 'Producto no encontrado' });
+        }
+        callback(null, { mensaje: 'Producto eliminado' });
     });
 };
 
 module.exports = { obtenerProductos, obtenerProductoPorId, crearProducto, actualizarProducto, eliminarProducto };
+
