@@ -14,12 +14,17 @@ exports.obtenerVentas = (req, res) => {
 // Crear una nueva venta
 exports.crearVenta = (req, res) => {
     const { fecha, total, id_cliente, id_empleado, id_sucursal, id_metodo_pago } = req.body;
+    
+    // Asegúrate de que la consulta sea esta
     const query = 'INSERT INTO venta (fecha, total, id_cliente, id_empleado, id_sucursal, id_metodo_pago) VALUES (?, ?, ?, ?, ?, ?)';
 
-    db.query(query, [fecha, total, id_cliente, id_empleado, id_sucursal, id_metodo_pago], (err, result) => {  // Cambiado connection a db
+    // Ejecutamos la consulta
+    db.query(query, [fecha, total, id_cliente, id_empleado, id_sucursal, id_metodo_pago], (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Error al insertar la venta', error: err });
         }
+
+        // El `result.insertId` devuelve el id generado automáticamente
         res.status(201).json({ message: 'Venta insertada correctamente', id_venta: result.insertId });
     });
 };
@@ -50,3 +55,16 @@ exports.eliminarVenta = (req, res) => {
         res.status(200).json({ message: 'Venta eliminada correctamente' });
     });
 };
+
+exports.getById = (id_venta, callback) => {
+    const query = 'SELECT * FROM venta WHERE id_venta = ?';
+    
+    db.query(query, [id_venta], (err, results) => {
+      if (err) return callback(err, null);
+      if (results.length > 0) {
+        callback(null, results[0]);  // Si encuentra la venta, pasa los datos al callback
+      } else {
+        callback(null, null);  // Si no encuentra la venta, pasa null
+      }
+    });
+  };
