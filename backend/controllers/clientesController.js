@@ -12,16 +12,22 @@ exports.obtenerClientes = (req, res) => {
 };
 
 // Crear un nuevo cliente
-exports.crearCliente = (req, res) => {
-    const { nombre, direccion, telefono, email } = req.body;
-    const query = 'INSERT INTO Cliente (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)';
-    db.query(query, [nombre, direccion, telefono, email], (err, result) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('Error al crear el cliente');
-        }
-        res.status(201).send('Cliente creado correctamente');
-    });
+exports.crearCliente = async (req, res) => {
+    try {
+        const { nombre, apellido, nit, telefono, email, direccion } = req.body;
+        const sql = 'INSERT INTO cliente (nombre, apellido, nit, telefono, email, direccion) VALUES (?, ?, ?, ?, ?, ?)';
+        
+        db.query(sql, [nombre, apellido, nit, telefono, email, direccion], (error, results) => {
+            if (error) {
+                console.error("❌ Error en la consulta SQL:", error);
+                return res.status(500).json({ mensaje: "Error al crear el cliente", error });
+            }
+            res.status(201).json({ mensaje: "Cliente creado correctamente", id: results.insertId });
+        });
+    } catch (err) {
+        console.error("❌ Error inesperado:", err);
+        res.status(500).json({ mensaje: "Error inesperado", error: err });
+    }
 };
 
 // Actualizar un cliente
