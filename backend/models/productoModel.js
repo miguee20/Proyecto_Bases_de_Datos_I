@@ -64,4 +64,3 @@ const eliminarProducto = (id, callback) => {
 };
 
 module.exports = { obtenerProductos, obtenerProductoPorId, crearProducto, actualizarProducto, eliminarProducto };
-
