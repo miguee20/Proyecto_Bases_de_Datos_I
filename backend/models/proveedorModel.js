@@ -19,22 +19,26 @@ const obtenerProveedorPorId = (id, callback) => {
 
 // Crear un nuevo proveedor
 const crearProveedor = (data, callback) => {
-    db.query('INSERT INTO proveedor (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)', 
-    [data.nombre, data.direccion, data.telefono, data.email], 
-    (err, results) => {
-        if (err) return callback(err, null);
-        callback(null, { id: results.insertId, ...data });
-    });
+    db.query(
+        'INSERT INTO proveedor (nombre, contacto, direccion, telefono, email) VALUES (?, ?, ?, ?, ?)', 
+        [data.nombre, data.contacto, data.direccion, data.telefono, data.email], 
+        (err, results) => {
+            if (err) return callback(err, null);
+            callback(null, { id: results.insertId, ...data });
+        }
+    );
 };
 
 // Actualizar un proveedor
 const actualizarProveedor = (id, data, callback) => {
-    db.query('UPDATE proveedor SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id_proveedor = ?', 
-    [data.nombre, data.direccion, data.telefono, data.email, id], 
-    (err, results) => {
-        if (err) return callback(err, null);
-        callback(null, { id, ...data });
-    });
+    db.query(
+        'UPDATE proveedor SET nombre = ?, contacto = ?, direccion = ?, telefono = ?, email = ? WHERE id_proveedor = ?', 
+        [data.nombre, data.contacto, data.direccion, data.telefono, data.email, id], 
+        (err, results) => {
+            if (err) return callback(err, null);
+            callback(null, { id, ...data });
+        }
+    );
 };
 
 // Eliminar un proveedor
@@ -52,3 +56,4 @@ module.exports = {
     actualizarProveedor,
     eliminarProveedor
 };
+
