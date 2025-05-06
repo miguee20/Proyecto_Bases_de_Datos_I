@@ -52,7 +52,7 @@ npm install
 
 Inicia el servidor:
 
-node backend/server.js
+desde la carpeta backend, ejecutar npm start
 
 El servidor debería estar corriendo en http://localhost:5000.
 
