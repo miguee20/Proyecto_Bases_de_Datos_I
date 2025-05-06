@@ -1,35 +1,34 @@
 const connection = require('../config/db');
 
-
 const Cliente = {
   // Crear un nuevo cliente
-  create: (nombre, direccion, correo, telefono, callback) => {
-    const query = 'INSERT INTO clientes (nombre, direccion, correo, telefono) VALUES (?, ?, ?, ?)';
-    connection.query(query, [nombre, direccion, correo, telefono], callback);
+  create: (nombre, apellido, nit, telefono, email, direccion, callback) => {
+    const query = 'INSERT INTO cliente (nombre, apellido, nit, telefono, email, direccion) VALUES (?, ?, ?, ?, ?, ?)';
+    connection.query(query, [nombre, apellido, nit, telefono, email, direccion], callback);
   },
   
   // Obtener todos los clientes
   getAll: (callback) => {
-    const query = 'SELECT * FROM clientes';
+    const query = 'SELECT * FROM cliente';
     connection.query(query, callback);
   },
 
   // Obtener un cliente por ID
-  getById: (id, callback) => {
-    const query = 'SELECT * FROM clientes WHERE id = ?';
-    connection.query(query, [id], callback);
+  getById: (id_cliente, callback) => {
+    const query = 'SELECT * FROM cliente WHERE id_cliente = ?';
+    connection.query(query, [id_cliente], callback);
   },
 
   // Actualizar un cliente
-  update: (id, nombre, direccion, correo, telefono, callback) => {
-    const query = 'UPDATE clientes SET nombre = ?, direccion = ?, correo = ?, telefono = ? WHERE id = ?';
-    connection.query(query, [nombre, direccion, correo, telefono, id], callback);
+  update: (id_cliente, nombre, apellido, nit, telefono, email, direccion, callback) => {
+    const query = 'UPDATE cliente SET nombre = ?, apellido = ?, nit = ?, telefono = ?, email = ?, direccion = ? WHERE id_cliente = ?';
+    connection.query(query, [nombre, apellido, nit, telefono, email, direccion, id_cliente], callback);
   },
 
   // Eliminar un cliente
-  delete: (id, callback) => {
-    const query = 'DELETE FROM clientes WHERE id = ?';
-    connection.query(query, [id], callback);
+  delete: (id_cliente, callback) => {
+    const query = 'DELETE FROM cliente WHERE id_cliente = ?';
+    connection.query(query, [id_cliente], callback);
   }
 };
 
