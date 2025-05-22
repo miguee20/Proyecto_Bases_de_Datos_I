@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="proveedores.js"></script>
+    <script src="ventas.js"></script>
+    <script src="compras.js"></script>
+    <script src="usuarios.js"></script>
+    <title>Fragancia - Administrador</title>
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:wght@500&family=Poppins:wght@300;400;600&display=swap');
+
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(270deg, #ff0066, #ff4d94, #a300cc, #7a00a3);
+            background-size: 400% 400%;
+            animation: gradientAnimation 6s infinite alternate;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 20px 5px 20px; /* más espacio arriba */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed; /* Sidebar stays fixed */
+            height: 100vh; /* Full screen height */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensures it is on top of other elements */
+        }
+
+        .sidebar img {
+            width: 150px; /* Increased logo size */
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        #nombreUsuario {
+            color: white;
+            font-size: 1rem; /* Smaller text size for user name */
+            margin-bottom: 20px;
+            text-align: center; /* Center the name */
+        }
+
+        .menu button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .menu button img {
+            transform: translateY(2px); 
+            width: 27px;
+            height: 27px;
+            margin-right: 15px;
+            vertical-align: middle;
+            object-fit: contain;
+        }
+
+        .menu button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Content Section */
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            margin-left: 270px; /* Margin left to ensure space for the sidebar */
+            width: calc(100% - 270px); /* Ensure content takes up remaining space */
+            overflow-x: hidden; /* Prevent horizontal overflow */
+        }
+
+        /* Prevent the content from overlapping with the sidebar */
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0; /* Remove margin when screen is small */
+                width: 100%; /* Ensure content takes up the full width */
+            }
+
+            .sidebar {
+                width: 200px; /* Adjust sidebar width on smaller screens */
+            }
+
+            .sidebar img {
+                width: 100px; /* Adjust logo size on smaller screens */
+                height: 100px;
+            }
+
+            #nombreUsuario {
+                font-size: 0.9rem; /* Smaller text for the user name */
+            }
+        }
+
+        .bienvenida-container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            margin-top: 40px;
+            max-width: 600px;
+        }
+
+        .bienvenida-container h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .bienvenida-container p {
+            font-size: 1.1rem;
+        }
+
+        .producto-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(229, 215, 215, 0.2);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .producto-card button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e2a5d9;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Modal Estilo */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-content h3 {
+            text-align: center;
+            color: #7a00a3;
+        }
+
+        .modal-content label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal-content input {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .modal-content button {
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .modal-content button[type="submit"] {
+            background-color: #a300cc;
+            color: white;
+        }
+
+        .modal-content button[type="submit"]:hover {
+            background-color: #7a00a3;
+        }
+
+        .modal-content button[type="button"] {
+            background-color: #ccc;
+            color: black;
+        }
+
+        .modal-content button[type="button"]:hover {
+            background-color: #bbb;
+        }
+
+        #seccion-clientes {
+            padding: 20px;
+        }
+
+        .productos-lista {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* Estilo de la tarjeta de cliente para que sea más transparente y similar a la de productos */
+        .cliente {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.2); /* Fondo semi-transparente */
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil para resaltar */
+        }
+        .cliente-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(229, 215, 215, 0.2);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 700px;
+        }
+        /* Ajustes a los textos dentro de la tarjeta de cliente */
+        .cliente h4 {
+            margin: 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff; /* Texto blanco para mejor contraste */
+        }
+
+        .cliente p {
+            margin: 5px 0;
+            color: #ddd; /* Color de texto más claro para mayor contraste */
+        }
+
+        /* Botones de la tarjeta de cliente */
+        .cliente button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e2a5d9;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cliente button:hover {
+            background-color: #d08ac6;
+        }
+
+        /* BOTON DE CERRAR SESION */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0 auto;
+        }
+
+        .logout-top {
+            background-color: #e2a5d9;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 120px; /* Fuerza el mismo ancho mínimo */
+            text-align: center;
+        }
+
+        .spacer {
+            width: 120px; /* mismo ancho aproximado que el botón */
+        }
+
+        
+        .home-btn {
+            background-color: #e2a5d9;
+            border: none;
+            padding: 8px 16px;
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+
+        .home-btn img {
+            width: 20px; /* Ajusta el tamaño del ícono */
+            height: 20px;
+            vertical-align: middle;
+        }
+
+
+        .header-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;            /* espacio entre Inicio y Cerrar sesión */
+        }
+        #seccion-usuarios {
+        padding: 20px;
+        }
+
+        .btn-agregar {
+        padding: 10px 20px;
+        margin-bottom: 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        }
+
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        }
+
+        th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+        }
+
+        th {
+        background-color: #f0f0f0;
+        }
+
+        .modal {
+        display: none;
+        position: fixed;
+        z-index: 10;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.6);
+        justify-content: center;
+        align-items: center;
+        }
+
+        .modal-contenido {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 400px;
+        }
+
+        .modal-botones {
+        margin-top: 15px;
+        text-align: right;
+        }
+
+        .btn-guardar {
+        padding: 8px 16px;
+        background-color: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        }
+
+        .btn-cancelar {
+        padding: 8px 16px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        margin-left: 10px;
+        }
+
+        .cuadro-blanco-config {
+        background-color: #fdf0f5; /* fondo rosa pálido */
+        color: black !important;   /* texto negro dentro de este cuadro */
+        padding: 20px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        width: 100%;
+        }
+
+
+
+    </style>
+</head>
+
+
+<!-- SIDE BAR -->
+<body>
+    <div class="sidebar">
+        <img src="logo_fragancia-removebg-preview.png" alt="Perfil" />
+        <h2 id="nombreUsuario">Admin</h2>
+        <div class="menu">
+            <button onclick="mostrarSeccionProductos()"><img src="iconos/productos.png" alt="Productos" /> Productos</button>
+            <button onclick="mostrarSeccionClientes()"><img src="iconos/cliente.png" alt="Clientes" /> Clientes</button>
+            <button onclick="mostrarSeccionCompras()"><img src="iconos/compras.png" alt="Compras" /> Compras</button>
+            <button onclick="mostrarSeccionVentas()"><img src="iconos/ventas.png" alt="Ventas" /> Ventas</button>
+            <button onclick="mostrarSeccionProveedores()"><img src="iconos/proveedores.png" alt="Proveedores" /> Proveedores</button>
+            <button onclick="location.href='gestion_reportes.html'"><img src="iconos/reportes.png" alt="Reportes" /> Reportes</button>
+            <button onclick="mostrarSeccionConfiguracion()"><img src="iconos/configuracion.png" alt="Configuración" /> Configuración</button>
+            
+
+        </div>
+    </div>
+<!-- SIDE BAR -->
+    
+    <div class="content">
+        <div class="header">
+            <div class="spacer"></div> <!-- Espaciador -->
+            <h1>Panel de Administrador</h1>
+            <div class="header-buttons">
+                <button onclick="location.href='menu_administrador.html'" class="logout-top">
+                    Inicio
+                </button>
+                <button id="logoutBtn" class="logout-top">
+                    Cerrar sesión
+                </button>
+            </div>
+        </div>
+
+
+
+
+        <div id="bienvenida" class="bienvenida-container">
+            <h2 id="mensajeBienvenida">Bienvenido(a)</h2>
+            <p>Selecciona una opción del menú para comenzar a gestionar el sistema.</p>
+            <p id="fecha-hora-actual" style="margin-top: 10px; font-size: 1.1rem; color: white;"></p>
+
+        </div>
+
+        <!-- mostrar productos -->
+        <div id="seccion-productos" style="display: none; width: 100%; max-width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                <h2>Listado de Productos</h2>
+                <button onclick="mostrarFormularioProducto()" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Agregar Producto</button>
+            </div>
+            <div id="lista-productos" style="margin-top: 20px;"></div>
+        </div>
+        <!-- Historial Stock -->
+        <div id="historial-stock-container" style="display:none; max-width: 800px; margin-top: 30px;">
+        <h3>Historial de Stock</h3>
+        <button onclick="cerrarHistorial()">Cerrar Historial</button>
+        <div id="historial-stock-list" style="max-height: 300px; overflow-y: auto;"></div>
+        </div>
+
+            
+    <div id="contenido-principal" style="display: none; width: 100%; max-width: 800px;"></div>
+
+    <!-- Modal de Agregar/Editar Producto -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Formulario de Producto</h3>
+            <form id="formProducto">
+                <input type="hidden" id="editProductoId">
+                <label for="editNombre">Nombre:</label>
+                <input type="text" id="editNombre" required>
+                <label for="editDescripcion">Descripción:</label>
+                <input type="text" id="editDescripcion" required>
+                <label for="editPrecio">Precio:</label>
+                <input type="number" id="editPrecio" required>
+                <label for="editStock">Stock:</label>
+                <input type="number" id="editStock" required>
+                <button type="submit">Guardar Producto</button>
+                <button type="button" onclick="cerrarModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+        <!-- mostrar compras -->
+        <div id="seccion-compras" style="display: none; width: 100%; max-width: 800px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                <h2>Listado de Compras</h2>
+                <button onclick="mostrarFormularioCompra()" style="background-color: #e48eda; padding: 10px; border: none; border-radius: 5px; color: white;">Agregar Compra</button>
+            </div>
+            <div id="lista-compras" style="margin-top: 20px;"></div> <!-- ID corregido -->
+        </div>
+
+        <div id="contenido-principal" style="display: none; width: 100%; max-width: 800px;"></div>
+
+        <!-- Modal de Agregar/Editar Compra -->
+        <div id="editModalCompra" class="modal"> <!-- ID corregido -->
+            <div class="modal-content">
+                <h3>Formulario de Compra</h3>
+                <form id="formCompra">
+                    <input type="hidden" id="editCompraId">
+                    <label for="editProductoCompra">Producto:</label> <!-- Nombre corregido -->
+                    <input type="text" id="editProductoCompra" required>
+
+                    <label for="editProveedorCompra">Proveedor:</label> <!-- Nombre corregido -->
+                    <input type="text" id="editProveedorCompra" required>
+
+                    <label for="editCantidadCompra">Cantidad:</label> <!-- Nombre corregido -->
+                    <input type="number" id="editCantidadCompra" required>
+
+                    <label for="editFechaCompra">Fecha:</label> <!-- Nombre corregido -->
+                    <input type="date" id="editFechaCompra" required>
+
+                    <button type="submit">Guardar Compra</button>
+                    <button type="button" onclick="cerrarModalCompra()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+
+                <!-- Sección Ventas -->
+<div id="seccion-ventas" style="display: none; width: 100%; max-width: 800px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+        <h2>Registro de Ventas</h2>
+        <button id="btnNuevaVenta" onclick="mostrarFormularioVenta()" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Nueva Venta</button>
+    </div>
+
+    <!-- Formulario de venta -->
+    <form id="formVenta" style="background-color: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin-top: 15px; display: none;">
+        <label for="clienteVenta">Cliente:</label>
+        <select id="clienteVenta" required style="margin-bottom: 10px; width: 100%; padding: 8px; border-radius: 5px;">
+            <option value="">Seleccione un cliente</option>
+            <!-- Opciones se cargarán dinámicamente con JS -->
+        </select>
+
+        <label for="productoVenta">Producto:</label>
+        <select id="productoVenta" required style="margin-bottom: 10px; width: 100%; padding: 8px; border-radius: 5px;">
+            <option value="">Seleccione un producto</option>
+            <!-- Opciones se cargarán dinámicamente con JS -->
+        </select>
+
+        <label for="cantidadVenta">Cantidad:</label>
+        <input type="number" id="cantidadVenta" required min="1" style="margin-bottom: 10px; width: 100%; padding: 8px; border-radius: 5px;">
+
+        <label for="fechaVenta">Fecha:</label>
+        <input type="date" id="fechaVenta" required style="margin-bottom: 10px; width: 100%; padding: 8px; border-radius: 5px;">
+
+        <button type="button" onclick="agregarProductoAVenta()" style="background-color: #8e44ad; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Agregar Producto</button>
+    </form>
+
+    <!-- Lista dinámica de productos añadidos a la venta -->
+    <div id="lista-productos-venta" style="margin-top: 30px;">
+        <h3>Productos en la Venta</h3>
+        <table style="width: 100%; text-align: left; background-color: rgba(255, 255, 255, 0.2); border-radius: 10px; padding: 10px;">
+            <thead>
+                <tr>
+                    <th style="color: black;">Producto</th>
+                    <th style="color: black;">Cantidad</th>
+                    <th style="color: black;">Precio Unitario</th>
+                    <th style="color: black;">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="detalle-venta-body">
+                <!-- Aquí se agregan dinámicamente las filas -->
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 20px; text-align: right;">
+        <button onclick="guardarVenta()" style="background-color: #a300cc; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Guardar Venta</button>
+    </div>
+
+    <!-- Listado de ventas -->
+    <div id="lista-ventas" style="margin-top: 30px;">
+        <h3>Ventas Registradas</h3>
+        <table id="tablaVentas" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Cliente</th>
+                    <th>Producto</th>
+                    <th>Precio Unitario</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Ventas se cargarán dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+        <!-- Modal de agregar/editar venta -->
+        <div id="formulario-editar-venta" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro translúcido */ display: none; align-items: center; justify-content: center; z-index: 1000;">
+
+            <div class="modalVenta" style="background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 600px; box-shadow: 0 0 15px rgba(0,0,0,0.3);">
+            <h3 id="tituloModalVenta">Agregar Venta</h3>
+            <form id="formEditVenta">
+                <div>
+                <label>Cliente:</label>
+                <select id="clienteVenta" required style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+                </div>
+                <div>
+                <label>Producto:</label>
+                <select id="productoVenta" required style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+                </div>
+                <!--<div>
+                    <label>Método de Pago:</label>
+                    <select id="metodoPagoVenta" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                        <option value="">Seleccione un método de pago</option>
+                    </select>
+                </div> -->
+                <div>
+                <label>Cantidad:</label>
+                <input type="number" id="cantidadVenta" min="1" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                </div>
+                <div>
+                <label>Precio unitario:</label>
+                <input type="number" id="precioVenta" min="0" step="0.01" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                </div>
+                <div>
+                <label>Fecha:</label>
+                <input type="date" id="fechaVenta" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <button type="submit" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Guardar</button>
+                <button type="button" onclick="cerrarModalVenta()" style="background-color: #f0b0b0; padding: 10px; border: none; border-radius: 5px; color: white;">Cancelar</button>
+                </div>
+            </form>
+            </div>
+        </div>
+
+
+
+    <!-- mostrar clientes -->
+    <!-- mostrar clientes -->
+    <div id="seccion-clientes" style="display: none; width: 100%; max-width: 800px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <h2>Listado de Clientes</h2>
+            <button onclick="mostrarFormularioCliente()" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Agregar Cliente</button>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+            <input type="text" id="searchBarClientes" placeholder="Buscar cliente..." onkeyup="buscarCliente()" style="padding: 8px; border-radius: 5px; width: 100%;" />
+        </div>
+
+        <div id="lista-clientes" style="margin-top: 20px;"></div>>
+
+        <!-- Modal de agregar/editar cliente -->
+        <div id="formulario-editar-cliente" class="modal" style="display: none;">
+            <div class="modal-content" style="background: white; padding: 20px; border-radius: 10px; width: 100%; max-width: 500px;">
+                <h3 id="tituloModalCliente">Agregar Cliente</h3>
+                <form id="formEditCliente">
+                    <div>
+                        <label>Nombre:</label>
+                        <input type="text" id="nombreCliente" required style="width: 100%; padding: 8px; margin-bottom: 10px;"/>
+                    </div>
+                    <div>
+                        <label>Apellido:</label>
+                        <input type="text" id="apellidoCliente" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                    </div>
+                    <div>
+                        <label>NIT:</label>
+                        <input type="text" id="nitCliente" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                    </div>
+                    <div>
+                        <label>Teléfono:</label>
+                        <input type="text" id="telefonoCliente" required style="width: 100%; padding: 8px; margin-bottom: 10px;"/>
+                    </div>
+                    <div>
+                        <label>Email:</label>
+                        <input type="email" id="emailCliente" required style="width: 100%; padding: 8px; margin-bottom: 10px;"/>
+                    </div>
+                    <div>
+                        <label>Dirección:</label>
+                        <input type="text" id="direccionCliente" required style="width: 100%; padding: 8px; margin-bottom: 10px;"/>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                        <button type="submit" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Guardar</button>
+                        <button type="button" onclick="cerrarModalCliente()" style="background-color: #f0b0b0; padding: 10px; border: none; border-radius: 5px; color: white;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     <!-- mostrar compras -->
+    <!-- mostrar compras -->
+    <div id="seccion-compras" style="display: none; width: 100%; max-width: 800px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <h2>Listado de Compras</h2>
+            <button onclick="mostrarFormularioCompra()" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Agregar Compra</button>
+        </div>
+        <div id="lista-compras" style="margin-top: 20px;"></div> <!-- ID corregido -->
+    </div>
+
+    <div id="contenido-principal" style="display: none; width: 100%; max-width: 800px;"></div>
+
+    <!-- Modal de Agregar/Editar Compra -->
+<!-- Modal de Agregar/Editar Compra -->
+    <div id="editModalCompra" class="modal">
+        <div class="modal-content">
+            <h3>Formulario de Compra</h3>
+            <form id="formCompra">
+                <input type="hidden" id="editCompraId">
+                
+                <label for="editProductoCompra">Producto:</label>
+                <select id="editProductoCompra" required></select>
+                
+                <label for="editProveedorCompra">Proveedor:</label>
+                <select id="editProveedorCompra" required></select>
+
+                <label for="editCantidadCompra">Cantidad:</label>
+                <input type="number" id="editCantidadCompra" required>
+
+                <label for="editFechaCompra">Fecha:</label>
+                <input type="date" id="editFechaCompra" required>
+
+                <button type="submit">Guardar Compra</button>
+                <button type="button" onclick="cerrarModalCompra()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- mostrar proveedores -->
+    <!-- SECCIÓN PROVEEDORES -->
+    <div id="seccion-proveedores" style="display: none; width: 100%; max-width: 800px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+            <h2>Listado de Proveedores</h2>
+            <button onclick="mostrarFormularioProveedor()" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Agregar Proveedor</button>
+        </div>
+    
+        <div style="margin-top: 20px; display: flex; justify-content: space-between;">
+            <input type="text" id="searchBarProveedores" placeholder="Buscar proveedor..." onkeyup="buscarProveedor()" style="padding: 8px; border-radius: 5px; width: 100%;" />
+        </div>
+    
+        <div id="lista-proveedores" style="margin-top: 20px;"></div>
+    
+        <!-- Modal de agregar/editar proveedor -->
+        <div id="formulario-editar-proveedor" class="modal" style="display: none;">
+            <div class="modal-content" style="background: rgb(218, 210, 210); padding: 20px; border-radius: 10px; width: 100%; max-width: 500px;">
+                <h3 id="tituloModalProveedor">Agregar Proveedor</h3>
+                <form id="formEditProveedor">
+                    <div>
+                        <label>Nombre:</label>
+                        <input type="text" id="nombreProveedor" required style="width: 100%; padding: 8px; margin-bottom: 10px;"/>
+                    </div>
+                    <div>
+                        <label>Contacto:</label>
+                        <input type="text" id="contactoProveedor" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                    </div>
+                    <div>
+                        <label>Teléfono:</label>
+                        <input type="text" id="telefonoProveedor" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                    </div>
+                    <div>
+                        <label>Email:</label>
+                        <input type="email" id="emailProveedor" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                    </div>
+                    <div>
+                        <label>Dirección:</label>
+                        <input type="text" id="direccionProveedor" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                        <button type="submit" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Guardar</button>
+                        <button type="button" onclick="cerrarModalProveedor()" style="background-color: #f0b0b0; padding: 10px; border: none; border-radius: 5px; color: white;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN CONFIGURACIÓN: GESTIÓN DE USUARIOS -->
+    <div id="seccion-configuracion" style="display: none; width: 100%; max-width: 800px;">
+
+    <!-- Título y botón con fondo oscuro y texto blanco -->
+    <div class="header-config" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; color: white;">
+        <h2>Gestión de Usuarios</h2>
+        <button onclick="abrirModalUsuario()" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Nuevo Usuario</button>
+    </div>
+
+    <!-- Contenedor con fondo claro y texto negro SOLO para la tabla -->
+    <div class="tabla-config" style="background-color: #fdf0f5; color: black; padding: 20px; border-radius: 10px; margin-top: 15px;">
+        <table style="width: 100%; margin-top: 0; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+            <th style="padding: 10px; border: 1px solid #e2a5d9;">Usuario</th>
+            <th style="padding: 10px; border: 1px solid #e2a5d9;">Empleado</th>
+            <th style="padding: 10px; border: 1px solid #e2a5d9;">Rol</th>
+            <th style="padding: 10px; border: 1px solid #e2a5d9;">Estado</th>
+            <th style="padding: 10px; border: 1px solid #e2a5d9;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tbody-usuarios"></tbody>
+        </table>
+    </div>
+
+    </div>
+
+
+
+    <!-- MODAL USUARIO -->
+    <!-- MODAL USUARIO -->
+    <div id="modal-usuario" class="modal" style="display: none;">
+    <div class="modal-content" style="background: rgb(218, 210, 210); padding: 20px; border-radius: 10px; width: 100%; max-width: 400px;">
+        <h3 id="modal-titulo" style="margin-top: 0;">Nuevo Usuario</h3>
+        <form id="form-usuario">
+        <div>
+            <label>Nombre de usuario:</label>
+            <input type="text" id="nombre_usuario" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+        </div>
+        <div>
+            <label>Contraseña:</label>
+            <input type="password" id="contraseña" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+        </div>
+        <div>
+            <label>Empleado:</label>
+            <select id="empleado" required style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+        </div>
+        <div>
+            <label>Rol:</label>
+            <select id="rol" required style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <button type="submit" style="background-color: #e2a5d9; padding: 10px; border: none; border-radius: 5px; color: white;">Guardar</button>
+            <button type="button" onclick="cerrarModalUsuario()" style="background-color: #f0b0b0; padding: 10px; border: none; border-radius: 5px; color: white;">Cancelar</button>
+        </div>
+        </form>
+    </div>
+    </div>
+
+
+    <!-------------------------------------------------------------------------SCRIPTS--------------------------------------------------------------------------------------------------------->
+    
+    <!------------------------------------------------------------------------ PRODUCTOS --------------------------------------------------------------------------------->
+    <!-- PAGINA PRINCIPAl -->
+    <!-- PRUEBA DE SCRIPT-->
+
+
+    <script>
+        window.onload = async () => {
+            const token = localStorage.getItem('token');
+            const nombre = localStorage.getItem('nombre_usuario');
+    
+            if (!token) {
+                alert('No estás logueado');
+                return window.location.href = 'login.html';
+            }
+    
+            try {
+                const response = await fetch('http://localhost:5000/api/verify-session', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+    
+                const data = await response.json();
+    
+                if (!data.isAuthenticated || data.rol !== 'admin') {
+                    alert('Acceso no autorizado.');
+                    return window.location.href = 'login.html';
+                }
+    
+                const nombreUsuario = nombre || 'Admin';
+                document.getElementById('nombreUsuario').innerText = nombreUsuario;
+                document.getElementById('mensajeBienvenida').innerText = `¡Bienvenido(a), ${nombreUsuario}!`;
+    
+            } catch (error) {
+                console.error('Error al verificar sesión:', error);
+                alert('Error al verificar la sesión.');
+                window.location.href = 'login.html';
+            }
+        };
+
+        // boton de cerrar sesion
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        });
+
+        // parte que muestra la fecha en la pagina
+        function mostrarFechaHoraActual() {
+            const ahora = new Date();
+            const fecha = ahora.toLocaleDateString('es-ES', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            const hora = ahora.toLocaleTimeString('es-ES');
+            const texto = `${fecha} - ${hora}`;
+            const elemento = document.getElementById('fecha-hora-actual');
+            if (elemento) {
+                elemento.textContent = texto;
+            }
+            }
+
+            mostrarFechaHoraActual();
+            setInterval(mostrarFechaHoraActual, 1000);
+
+    
+        // ======================= UTILIDAD GENERAL ============================
+        function ocultarTodasLasSecciones() {
+            document.getElementById('bienvenida').style.display = 'none';
+            document.getElementById('seccion-productos').style.display = 'none';
+            document.getElementById('seccion-clientes').style.display = 'none';
+            document.getElementById('seccion-proveedores').style.display = 'none';
+            document.getElementById('seccion-compras').style.display = 'none';
+            document.getElementById('seccion-ventas').style.display = 'none';
+            // Agrega aquí otras secciones si tienes más
+        }
+    
+        // ======================= PRODUCTOS ============================
+        function mostrarSeccionProductos() {
+            ocultarTodasLasSecciones();
+            document.getElementById('seccion-productos').style.display = 'block';
+            cargarProductos();
+        }
+    
+        function cargarProductos() {
+            const token = localStorage.getItem('token');
+            fetch('http://localhost:5000/api/productos', {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(productos => {
+                const contenedor = document.getElementById('lista-productos');
+                contenedor.innerHTML = '';
+                productos.forEach(p => {
+                    const item = document.createElement('div');
+                    item.className = 'producto-card';
+                    item.innerHTML = `
+                        <div>
+                            <h4>${p.nombre}</h4>
+                            <p>${p.descripcion}</p>
+                            <p><strong>Precio:</strong> $${p.precio} | <strong>Stock:</strong> ${p.stock}</p>
+                        </div>
+                        <div>
+                            <button onclick="mostrarModalEdicion(${p.id_producto})">Editar</button>
+                            <button onclick="eliminarProducto(${p.id_producto})">Eliminar</button>
+                            <button onclick="mostrarHistorialStock(${p.id_producto})" style="background-color:#a68cd9; color:white; border:none; padding:5px 10px; border-radius:4px; margin-left:5px;">Historial Stock</button>
+                        </div>
+                    `;
+                    contenedor.appendChild(item);
+                });
+            });
+        }
+
+    
+        function mostrarFormularioProducto() {
+            document.getElementById('editModal').style.display = 'flex';
+            document.getElementById('formProducto').reset();
+            document.getElementById('editProductoId').value = '';
+        }
+    
+        function cerrarModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+    
+        document.getElementById('formProducto').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('editProductoId').value;
+            const nombre = document.getElementById('editNombre').value;
+            const descripcion = document.getElementById('editDescripcion').value;
+            const precio = document.getElementById('editPrecio').value;
+            const stock = document.getElementById('editStock').value;
+    
+            const token = localStorage.getItem('token');
+            const url = id ? `http://localhost:5000/api/productos/${id}` : 'http://localhost:5000/api/productos';
+            const method = id ? 'PUT' : 'POST';
+    
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ nombre, descripcion, precio, stock })
+                });
+    
+                if (res.ok) {
+                    alert('Producto guardado');
+                    cargarProductos();
+                    cerrarModal();
+                } else {
+                    const error = await res.json();
+                    alert('Error: ' + error.message);
+                }
+            } catch (error) {
+                alert('Error en la solicitud');
+            }
+        });
+    
+        function mostrarModalEdicion(id) {
+            const token = localStorage.getItem('token');
+            fetch(`http://localhost:5000/api/productos/${id}`, {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(producto => {
+                document.getElementById('editProductoId').value = producto.id_producto;
+                document.getElementById('editNombre').value = producto.nombre;
+                document.getElementById('editDescripcion').value = producto.descripcion;
+                document.getElementById('editPrecio').value = producto.precio;
+                document.getElementById('editStock').value = producto.stock;
+    
+                document.getElementById('editModal').style.display = 'flex';
+            });
+        }
+    
+        function eliminarProducto(id) {
+            const token = localStorage.getItem('token');
+            if (!confirm("¿Estás seguro de eliminar este producto?")) return;
+    
+            fetch(`http://localhost:5000/api/productos/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            })
+            .then(res => {
+                if (res.ok) {
+                    alert('Producto eliminado');
+                    cargarProductos();
+                } else {
+                    alert('Error al eliminar el producto');
+                }
+            });
+        }
+
+
+        function mostrarHistorialStock(id_producto) {
+            const token = localStorage.getItem('token');
+            fetch(`http://localhost:5000/api/productos/${id_producto}/historial-stock`, {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            })
+            .then(res => res.json())
+            .then(historial => {
+                const container = document.getElementById('historial-stock-list');
+                container.innerHTML = ''; // limpiar historial previo
+
+                if (historial.length === 0) {
+                    container.innerHTML = '<p>No hay historial de stock para este producto.</p>';
+                } else {
+                    // Crear tabla para mostrar historial
+                    const tabla = document.createElement('table');
+                    tabla.style.width = '100%';
+                    tabla.style.borderCollapse = 'collapse';
+
+                    // Cabecera tabla
+                    tabla.innerHTML = `
+                        <thead>
+                            <tr style="background-color:#f0f0f0;">
+                                <th style="border: 1px solid #ccc; padding: 8px;">Fecha</th>
+                                <th style="border: 1px solid #ccc; padding: 8px;">Tipo Movimiento</th>
+                                <th style="border: 1px solid #ccc; padding: 8px;">Cantidad Anterior</th>
+                                <th style="border: 1px solid #ccc; padding: 8px;">Cantidad Nueva</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    `;
+
+                    const tbody = tabla.querySelector('tbody');
+
+                    historial.forEach(registro => {
+                        const fila = document.createElement('tr');
+                        fila.innerHTML = `
+                            <td style="border: 1px solid #ccc; padding: 8px;">${new Date(registro.fecha).toLocaleString()}</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${registro.tipo_movimiento}</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${registro.cantidad_anterior}</td>
+                            <td style="border: 1px solid #ccc; padding: 8px;">${registro.cantidad_nueva}</td>
+                        `;
+                        tbody.appendChild(fila);
+                    });
+
+                    container.appendChild(tabla);
+                }
+
+                document.getElementById('historial-stock-container').style.display = 'block';
+                ocultarTodasLasSecciones(); // Opcional, si quieres ocultar otras secciones
+            })
+            .catch(() => {
+                alert('Error al cargar historial de stock');
+            });
+        }
+
+        function cerrarHistorial() {
+            document.getElementById('historial-stock-container').style.display = 'none';
+            mostrarSeccionProductos(); // O mostrar la sección que estaba abierta antes
+        }
+
+    
+        // ======================= CLIENTES ============================
+        function mostrarSeccionClientes() {
+            ocultarTodasLasSecciones();
+            document.getElementById('seccion-clientes').style.display = 'block';
+            cargarClientes();
+        }
+    
+        async function cargarClientes() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:5000/api/clientes', {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            });
+            const clientes = await response.json();
+            const contenedor = document.getElementById('lista-clientes');
+            contenedor.innerHTML = '';
+    
+            clientes.forEach(cliente => {
+                const card = document.createElement('div');
+                card.className = 'card-cliente';
+                
+                card.style = `
+                    background: rgba(229, 215, 215, 0.2);
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+                    width: 500px;
+                    max-width: 100%;
+                    font-family: Arial, sans-serif;
+                `;
+                card.innerHTML = `
+                    <h4>${cliente.nombre} ${cliente.apellido}</h4>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div style="flex: 1;">
+                            <p><strong>Email:</strong> ${cliente.email}</p>
+                            <p><strong>Dirección:</strong> ${cliente.direccion}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p><strong>NIT:</strong> ${cliente.nit}</p>
+                            <p><strong>Teléfono:</strong> ${cliente.telefono}</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button onclick="mostrarFormularioEditarCliente(${cliente.id_cliente})" style="background-color: #e2a5d9; border: none; padding: 8px; border-radius: 5px; color: white;">Editar</button>
+                        <button onclick="eliminarCliente(${cliente.id_cliente})" style="background-color: #f0b0b0; border: none; padding: 8px; border-radius: 5px; color: white; margin-left: 10px;">Eliminar</button>
+                    </div>
+                `;
+
+
+
+                contenedor.appendChild(card);
+            });
+        }
+    
+        function mostrarFormularioCliente() {
+            document.getElementById('tituloModalCliente').innerText = 'Agregar Cliente';
+            document.getElementById('formulario-editar-cliente').style.display = 'flex';
+            document.getElementById('formEditCliente').reset();
+            document.getElementById('formEditCliente').setAttribute('data-id', '');
+        }
+    
+        async function mostrarFormularioEditarCliente(id_cliente) {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`http://localhost:5000/api/clientes/${id_cliente}`, {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            });
+            const cliente = await res.json();
+    
+            document.getElementById('nombreCliente').value = cliente.nombre;
+            document.getElementById('apellidoCliente').value = cliente.apellido;
+            document.getElementById('nitCliente').value = cliente.nit;
+            document.getElementById('telefonoCliente').value = cliente.telefono;
+            document.getElementById('emailCliente').value = cliente.email;
+            document.getElementById('direccionCliente').value = cliente.direccion;
+            document.getElementById('formEditCliente').setAttribute('data-id', cliente.id_cliente);
+    
+            document.getElementById('tituloModalCliente').innerText = 'Editar Cliente';
+            document.getElementById('formulario-editar-cliente').style.display = 'flex';
+        }
+    
+        function cerrarModalCliente() {
+            document.getElementById('formulario-editar-cliente').style.display = 'none';
+        }
+    
+        document.getElementById('formEditCliente').addEventListener('submit', async function(e) {
+            e.preventDefault();
+    
+            const id_cliente = this.getAttribute('data-id');
+            const token = localStorage.getItem('token');
+    
+            const cliente = {
+                nombre: document.getElementById('nombreCliente').value,
+                apellido: document.getElementById('apellidoCliente').value,
+                nit: document.getElementById('nitCliente').value,
+                telefono: document.getElementById('telefonoCliente').value,
+                email: document.getElementById('emailCliente').value,
+                direccion: document.getElementById('direccionCliente').value
+            };
+    
+            const url = id_cliente ? `http://localhost:5000/api/clientes/${id_cliente}` : 'http://localhost:5000/api/clientes';
+            const method = id_cliente ? 'PUT' : 'POST';
+    
+            const res = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(cliente)
+            });
+    
+            if (res.ok) {
+                alert('Cliente guardado exitosamente');
+                cargarClientes();
+                cerrarModalCliente();
+            } else {
+                const error = await res.json();
+                alert('Error: ' + (error.message || 'No se pudo guardar el cliente.'));
+            }
+        });
+    
+        async function eliminarCliente(id_cliente) {
+            const token = localStorage.getItem('token');
+            if (!confirm("¿Estás seguro de eliminar este cliente?")) return;
+    
+            const res = await fetch(`http://localhost:5000/api/clientes/${id_cliente}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            });
+    
+            if (res.ok) {
+                alert('Cliente eliminado correctamente');
+                cargarClientes();
+            } else {
+                alert('Error al eliminar el cliente');
+            }
+        }
+    
+        function buscarCliente() {
+            const input = document.getElementById('searchBarClientes').value.toLowerCase();
+            const clientes = document.querySelectorAll('.card-cliente');
+    
+            clientes.forEach(cliente => {
+                const texto = cliente.innerText.toLowerCase();
+                cliente.style.display = texto.includes(input) ? '' : 'none';
+            });
+        }
+    </script>
+    
+</body>
+</html>
