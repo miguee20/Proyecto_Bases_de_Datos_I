@@ -2,7 +2,7 @@
 
 Este proyecto es una aplicación web completa para la gestión de una tienda de fragancias. Permite manejar productos, proveedores, clientes, empleados, compras, ventas, usuarios, roles y configuración de seguridad. La aplicación cuenta con autenticación mediante JWT y una interfaz visual desarrollada en HTML y CSS.
 
-(El proyecto no está finalizado al 100%, pero, conforme el crongrama que se tiene con el cliente aún queda mucho tiempo disponible para su entrega y despliegue, pero con la fecha de entrega del proyecto para presentación de clase lamentablemente no pudimos terminarlo a tiempo, lo que si se logró fue cumplir con los requerimientos solicitados tanto por la parte de conexión cliente-servidor y el uso de triggers, proximamente tambien está pensado usar varios procedimientos almacenados)
+(El proyecto no está finalizado al 100%, pero, conforme el cronograma que se tiene con el cliente aún queda mucho tiempo disponible para su entrega y despliegue, pero con la fecha de entrega del proyecto para presentación de clase lamentablemente no pudimos terminarlo a tiempo, lo que si se logró fue cumplir con los requerimientos solicitados tanto por la parte de conexión cliente-servidor y el uso de triggers, proximamente tambien está pensado usar varios procedimientos almacenados)
 
 ---
 
