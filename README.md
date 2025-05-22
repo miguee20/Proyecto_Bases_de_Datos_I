@@ -39,7 +39,7 @@ El sistema **Fragancia** está diseñado para cubrir todas las operaciones clave
 ## 🛠️ Tecnologías Utilizadas
 
 - **Node.js** y **Express.js** – Backend y API RESTful  
-- **MariaDB** – Base de datos relacional local  
+- **MariaDB** – Base de datos relacional (por el momento local, se espera alojar en la nube para cuando salga a produccion)
 - **HTML y CSS** – Interfaz visual  
 - **JWT (jsonwebtoken)** – Autenticación y protección de rutas  
 - **Dotenv** – Configuración por variables de entorno  
@@ -98,9 +98,9 @@ COOKIE_NAME=XXXX
 
 5. Inicia el servidor desde la carpeta raíz del backend:
 
-# 📍 El servidor estará corriendo en: http://localhost:5000
+Debe de imprimir en consola:📍 El servidor estará corriendo en: http://localhost:5000
 
-# 🔐 Puedes abrir http://localhost:5000/login.html para iniciar sesión desde el navegador.
+🔐 Puedes abrir http://localhost:5000/login.html para iniciar sesión desde el navegador.
 
 ## 📌 Notas Adicionales
 - El frontend se encuentra en la carpeta public, y puede personalizarse fácilmente.
