@@ -1,0 +1,56 @@
+Trigger 1: Cuando se crea un producto guarda su entrada para usarla en el 2do trigger.
+
+
+DELIMITER //
+
+CREATE TRIGGER tr_insert_historial_stock
+AFTER INSERT ON producto
+FOR EACH ROW
+BEGIN
+  INSERT INTO historial_stock (
+    id_producto,
+    cantidad,
+    fecha,
+    tipo_movimiento,
+    observaciones
+  )
+  VALUES (
+    NEW.id_producto,
+    NEW.stock,
+    NOW(),
+    'Entrada',
+    'Registro inicial del producto'
+  );
+END;
+//
+
+DELIMITER ;
+
+Trigger 2: Cada vez que el stock cambia, guarda si fue una "Entrada" o una "Salida" y cuánto fue la diferencia, esto se puede ver en la tabla de historial_stock en la base de datos
+DELIMITER //
+
+CREATE TRIGGER tr_update_historial_stock
+AFTER UPDATE ON producto
+FOR EACH ROW
+BEGIN
+  IF OLD.stock <> NEW.stock THEN
+    INSERT INTO historial_stock (
+      id_producto,
+      cantidad,
+      fecha,
+      tipo_movimiento,
+      observaciones
+    )
+    VALUES (
+      NEW.id_producto,
+      NEW.stock - OLD.stock,
+      NOW(),
+      IF(NEW.stock > OLD.stock, 'Entrada', 'Salida'),
+      'Modificación manual del stock'
+    );
+  END IF;
+END;
+//
+
+DELIMITER ;
+
