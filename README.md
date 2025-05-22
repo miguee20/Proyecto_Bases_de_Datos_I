@@ -1,59 +1,116 @@
-# Tienda de Fragancias
+# 🌸 Sistema de Gestión - Fragancia
 
-Este proyecto es una aplicación completa para la gestión de una tienda de fragancias. Permite manejar información sobre productos, proveedores, clientes, compras, ventas y devoluciones a través de una API RESTful. Además, el frontend será desarrollado con **HTML** y **CSS** para proporcionar una interfaz fácil de usar.
+Este proyecto es una aplicación web completa para la gestión de una tienda de fragancias. Permite manejar productos, proveedores, clientes, empleados, compras, ventas, usuarios, roles y configuración de seguridad. La aplicación cuenta con autenticación mediante JWT y una interfaz visual desarrollada en HTML y CSS.
 
-## Descripción
+---
 
-La aplicación está diseñada para gestionar todas las operaciones de una tienda de fragancias, desde la administración de inventarios hasta la gestión de proveedores, clientes y transacciones de compra y venta. 
+## 🧾 Descripción General
 
-El sistema ofrece operaciones **CRUD** (Crear, Leer, Actualizar, Eliminar) para productos, proveedores, clientes y otros recursos clave. Utiliza **MariaDB** como base de datos para almacenar la información de manera segura y eficiente.
+El sistema **Fragancia** está diseñado para cubrir todas las operaciones clave de una tienda de fragancias, incluyendo:
 
-## Tecnologías Utilizadas 🛠️
+- Gestión de productos  
+- Registro de clientes y proveedores  
+- Control de inventario mediante compras y ventas  
+- Administración de usuarios y roles  
+- Módulo de configuración con control de acceso  
+- Interfaz de login y menú de administrador  
+- Seguridad mediante autenticación con tokens (JWT)  
 
-- **Node.js**: Para ejecutar el backend de la aplicación.
-- **Express.js**: Framework web para la construcción de la API RESTful.
-- **MariaDB**: Base de datos relacional para almacenar la información.
-- **HTML y CSS**: Para la creación del frontend de la aplicación.
+---
 
-## Estructura de Rutas 🚀
+## 🗃️ Funcionalidades Implementadas
 
-La aplicación cuenta con las siguientes rutas para gestionar los diferentes recursos:
+| Módulo       | Funciones principales                                              |
+|--------------|--------------------------------------------------------------------|
+| **Productos**    | Crear, listar, editar y eliminar productos                         |
+| **Clientes**     | Crear, listar, editar y eliminar clientes                          |
+| **Proveedores**  | CRUD de proveedores (nombre, contacto, dirección, etc.)            |
+| **Compras**      | Registrar compras (producto, proveedor, cantidad, fecha)           |
+| **Ventas**       | Registrar ventas y actualizar stock automáticamente                |
+| **Usuarios**     | Crear, editar, cambiar contraseña, activar/desactivar              |
+| **Roles**        | Crear, editar, eliminar roles                                      |
+| **Empleados**    | Gestión básica de empleados relacionados a usuarios                |
+| **Autenticación**| Login, generación y verificación de token JWT                      |
+| **Seguridad**    | Middleware para proteger rutas privadas                             |
+| **Menú principal**| Interfaz visual con menú y navegación entre módulos                |
 
-- **/api/productos**: Rutas para la gestión de productos (CRUD).
-- **/api/proveedores**: Rutas para la gestión de proveedores (CRUD).
-- **/api/clientes**: Rutas para la gestión de clientes (CRUD).
-- **/api/compras**: Rutas para registrar y consultar compras realizadas.
-- **/api/ventas**: Rutas para registrar y consultar ventas realizadas.
-- **/api/devoluciones**: Rutas para registrar y consultar devoluciones de productos.
+---
 
-## Conexión a la Base de Datos 🔗
+## 🛠️ Tecnologías Utilizadas
 
-La aplicación se conecta a una base de datos **MariaDB**. Se ha configurado un archivo `.env` para manejar las variables de entorno, tales como las credenciales de la base de datos.
+- **Node.js** y **Express.js** – Backend y API RESTful  
+- **MariaDB** – Base de datos relacional local  
+- **HTML y CSS** – Interfaz visual  
+- **JWT (jsonwebtoken)** – Autenticación y protección de rutas  
+- **Dotenv** – Configuración por variables de entorno  
+- **Cors**, **Morgan**, **Cookie-Parser** – Middlewares útiles para desarrollo  
+- **GitHub Web** – Control de versiones y colaboración
 
-Ejemplo de archivo `.env`:
+---
 
+## 🔐 Rutas Principales de la API
+
+Todas las rutas protegidas requieren autenticación mediante token.
+
+| Ruta                       | Funcionalidad                                |
+|----------------------------|----------------------------------------------|
+| `POST /api/login`          | Iniciar sesión y obtener token               |
+| `GET /api/menu-admin`      | Verificar token y rol del usuario            |
+| `/api/productos`           | CRUD de productos                            |
+| `/api/clientes`            | CRUD de clientes                             |
+| `/api/proveedores`         | CRUD de proveedores                          |
+| `/api/compras`             | Registrar y ver compras                      |
+| `/api/ventas`              | Registrar y ver ventas                       |
+| `/api/usuarios`            | Gestión de usuarios                          |
+| `/api/roles`               | Gestión de roles                             |
+| `/api/empleados`           | Gestión de empleados                         |
+| `/api/verify-session`      | Verificar token activo                       |
+
+---
+
+## 🔐 Seguridad y Autenticación
+
+- El login genera un token JWT válido por tiempo configurable.
+- El token se usa para acceder a rutas protegidas.
+- Implementado middleware `verificarToken` para proteger accesos no autorizados.
+
+## 🔗 Conexión a la Base de Datos
+
+Se usa un archivo `.env` para configurar las credenciales de conexión a MariaDB:
+
+ejemplo del env:
+PORT=5000
 DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=password
-DB_NAME=fragancia
 DB_PORT=3307
+DB_USER=XXXX
+DB_PASSWORD=XXXX
+DB_NAME=fragancia
+JWT_SECRET=XXXX
+COOKIE_NAME=XXXX
 
-## Instrucciones para Ejecutar el Proyecto 🏃‍♂️
-Clona este repositorio:
+## 🚀 Instrucciones para Ejecutar el Proyecto
+1. Clona el repositorio:
+2. Instala las dependencias del backend:
 
-git clone https://github.com/tu-usuario/tienda-fragancias.git
-cd tienda-fragancias
+- npm install
 
-# Instala las dependencias:
+4. Crea el archivo .env con las credenciales de tu base de datos.
 
-npm install
+5. Inicia el servidor desde la carpeta raíz del backend:
 
-# Configura tu archivo .env con las credenciales de la base de datos.
+# 📍 El servidor estará corriendo en: http://localhost:5000
 
-Inicia el servidor:
+# 🔐 Puedes abrir http://localhost:5000/login.html para iniciar sesión desde el navegador.
 
-desde la carpeta backend, ejecutar npm start
+## 📌 Notas Adicionales
+- El frontend se encuentra en la carpeta public, y puede personalizarse fácilmente.
 
-El servidor debería estar corriendo en http://localhost:5000.
+- El sistema está en constante desarrollo, por lo que se seguirán agregando funcionalidades.
 
-# Recordar que el puerto de la base de datos es el 3307 (agregar al path de mariadb)
+- ❌ No se incluye el módulo de devoluciones, ya que fue descartado del alcance actual.
+
+## 💻 Desarrollado por Miguel Salguero, Iván Ordoñez, Jose López
+
+
+
+
